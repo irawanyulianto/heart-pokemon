@@ -2,12 +2,7 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { pokeApi } from '@/services/pokeapi'
 import { ALL_TYPES } from '@/composables/useTypeData'
-import type { PokemonSummary, PokemonTypeName } from '@/types'
-
-interface NamedPokemon {
-  id: number
-  name: string
-}
+import type { NamedPokemon, PokemonSummary, PokemonTypeName } from '@/types'
 
 type LoadStatus = 'idle' | 'loading' | 'error'
 

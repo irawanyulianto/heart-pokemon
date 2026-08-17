@@ -23,6 +23,18 @@ const routes: RouteRecordRaw[] = [
         meta: { title: 'Pokédex' },
       },
       {
+        path: 'compare',
+        name: 'compare',
+        component: () => import('../views/CompareView.vue'),
+        meta: { title: 'Compare' },
+      },
+      {
+        path: 'type-calculator',
+        name: 'type-calculator',
+        component: () => import('../views/TypeCalculatorView.vue'),
+        meta: { title: 'Type Calculator' },
+      },
+      {
         path: 'pokemon/:id',
         name: 'pokemon',
         component: () => import('../views/PokemonDetailView.vue'),

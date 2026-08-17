@@ -5,6 +5,8 @@ import { useRoute } from 'vue-router'
 const links = [
   { label: 'Beranda', to: '/' },
   { label: 'Pokédex', to: '/pokedex' },
+  { label: 'Compare', to: '/compare' },
+  { label: 'Type Calc', to: '/type-calculator' },
   { label: 'Tentang', to: '/about' },
 ]
 

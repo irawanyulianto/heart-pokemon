@@ -1,5 +1,5 @@
 /* Service worker Pokémon Explorer — PWA offline */
-const CACHE_VERSION = 'v1'
+const CACHE_VERSION = 'v2'
 const SHELL_CACHE = 'poke-explorer-shell-' + CACHE_VERSION
 const API_CACHE = 'poke-explorer-api-' + CACHE_VERSION
 const SPRITE_CACHE = 'poke-explorer-sprites-' + CACHE_VERSION
@@ -9,6 +9,7 @@ const SHELL_URLS = ['/', '/index.html']
 const SDK_ORIGINS = ['https://pokeapi.co', 'https://api.tcgdex.net']
 const SPRITE_ORIGINS = [
   'https://raw.githubusercontent.com',
+  'https://cdn.jsdelivr.net',
   'https://assets.tcgdex.net',
 ]
 

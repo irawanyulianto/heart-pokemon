@@ -10,6 +10,8 @@ import type {
 } from '@/types'
 
 const BASE_URL = 'https://pokeapi.co/api/v2'
+const SPRITE_BASE_URL =
+  'https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites'
 
 export function idFromUrl(url: string): number {
   const parts = url.replace(/\/$/, '').split('/')
@@ -17,15 +19,15 @@ export function idFromUrl(url: string): number {
 }
 
 export function officialArtworkUrl(id: number | string): string {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+  return `${SPRITE_BASE_URL}/pokemon/other/official-artwork/${id}.png`
 }
 
 export function officialArtworkShinyUrl(id: number | string): string {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${id}.png`
+  return `${SPRITE_BASE_URL}/pokemon/other/official-artwork/shiny/${id}.png`
 }
 
 export function defaultSpriteUrl(id: number | string): string {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
+  return `${SPRITE_BASE_URL}/pokemon/${id}.png`
 }
 
 function toSummary(pokemon: Pokemon): PokemonSummary {
@@ -74,6 +76,7 @@ export const pokeApi = {
   getPokemon(idOrName: string | number): Promise<Pokemon> {
     return fetchJson<Pokemon>(`${BASE_URL}/pokemon/${idOrName}`, {
       ttlMs: TTL.DAY,
+      persist: true,
     })
   },
 
@@ -91,12 +94,14 @@ export const pokeApi = {
   getPokemonSpecies(idOrName: string | number): Promise<PokemonSpecies> {
     return fetchJson<PokemonSpecies>(`${BASE_URL}/pokemon-species/${idOrName}`, {
       ttlMs: TTL.DAY,
+      persist: true,
     })
   },
 
   getEvolutionChain(id: number | string): Promise<EvolutionChain> {
     return fetchJson<EvolutionChain>(`${BASE_URL}/evolution-chain/${id}`, {
       ttlMs: TTL.DAY,
+      persist: true,
     })
   },
 
@@ -107,6 +112,7 @@ export const pokeApi = {
   getType(name: string): Promise<PokemonTypeInfo> {
     return fetchJson<PokemonTypeInfo>(`${BASE_URL}/type/${name}`, {
       ttlMs: TTL.DAY,
+      persist: true,
     })
   },
 

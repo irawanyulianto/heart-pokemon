@@ -10,6 +10,12 @@ export interface APIResourceList<T extends NamedAPIResource = NamedAPIResource> 
   results: T[]
 }
 
+/** Pokémon ringkas (id + nama) untuk pemilihan/dropdown. */
+export interface NamedPokemon {
+  id: number
+  name: string
+}
+
 /** Ringkasan ringan untuk kartu di list (hasil dari pokemon/{id}) */
 export interface PokemonSummary {
   id: number
