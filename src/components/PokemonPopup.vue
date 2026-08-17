@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { pokeApi } from '@/services/pokeapi'
 import PokemonImage from '@/components/PokemonImage.vue'
 import TypeBadge from '@/components/TypeBadge.vue'
+import StatBar from '@/components/StatBar.vue'
 import {
   capitalize,
   formatHeight,
   formatWeight,
   pokedexNumber,
+  statLabel,
 } from '@/utils/format'
 import type { Pokemon, PokemonSummary } from '@/types'
 
@@ -15,6 +17,16 @@ const props = defineProps<{ pokemon: PokemonSummary }>()
 const emit = defineEmits<{ close: [] }>()
 
 const detail = ref<Pokemon | null>(null)
+
+const stats = computed(() =>
+  (detail.value?.stats ?? []).map((s) => ({
+    label: statLabel(s.stat.name),
+    value: s.base_stat,
+  })),
+)
+const statsTotal = computed(() =>
+  stats.value.reduce((sum, s) => sum + s.value, 0),
+)
 
 watch(
   () => props.pokemon.id,
@@ -115,6 +127,27 @@ onBeforeUnmount(() => {
                 {{ detail ? formatWeight(detail.weight) : '…' }}
               </p>
             </div>
+          </div>
+
+          <div
+            v-if="stats.length > 0"
+            class="rounded-xl bg-slate-50 px-4 py-3"
+          >
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+              Base Stats
+            </p>
+            <div class="mt-2.5 flex flex-col gap-2">
+              <StatBar
+                v-for="stat in stats"
+                :key="stat.label"
+                :label="stat.label"
+                :value="stat.value"
+              />
+            </div>
+            <p class="mt-2 text-xs font-medium text-slate-500">
+              Total base stats:
+              <span class="font-bold text-slate-800">{{ statsTotal }}</span>
+            </p>
           </div>
 
           <RouterLink
