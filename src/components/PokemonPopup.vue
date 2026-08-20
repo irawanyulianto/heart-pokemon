@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
       />
 
       <div
-        class="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl"
+        class="relative max-h-[calc(100vh-2rem)] w-full max-w-sm overflow-y-auto rounded-3xl bg-white shadow-2xl max-h-[calc(100dvh-2rem)]"
       >
         <button
           type="button"

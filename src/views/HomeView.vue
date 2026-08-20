@@ -35,7 +35,9 @@ function search() {
 
 <template>
   <div class="space-y-16 pb-4">
-    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-50 via-sky-50 to-white px-6 py-12 sm:px-12 sm:py-16">
+    <section
+      class="relative -mx-4 overflow-hidden rounded-3xl bg-gradient-to-br from-primary-50 via-sky-50 to-white sm:-mx-6 xl:-mx-[calc((100vw-69rem)/2)]"
+    >
       <svg
         class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 text-primary-100/70"
         viewBox="0 0 100 100"
@@ -47,7 +49,10 @@ function search() {
         <circle cx="50" cy="50" r="13" fill="#fff" stroke="currentColor" stroke-width="6" />
       </svg>
 
-      <div class="max-w-2xl">
+      <div
+        class="relative z-10 mx-auto w-full max-w-6xl px-6 py-12 sm:px-12 sm:py-16"
+      >
+        <div class="max-w-2xl">
         <h1 class="text-3xl font-extrabold tracking-tight text-primary-900 sm:text-4xl">
           Jelajahi Dunia Pokémon
         </h1>
@@ -75,6 +80,7 @@ function search() {
             </RouterLink>
           </div>
         </div>
+      </div>
       </div>
     </section>
 

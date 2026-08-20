@@ -70,3 +70,15 @@ function onInput(event: Event) {
     </button>
   </div>
 </template>
+
+<style scoped>
+/* Sembunyikan tombol silang bawaan browser (webkit) agar tidak ada
+   dua tanda silang: browser + tombol hapus kustom di bawah. */
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  display: none;
+}
+</style>
