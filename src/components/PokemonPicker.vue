@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { usePokedexStore } from '@/stores/pokedex'
 import { defaultSpriteUrl } from '@/services/pokeapi'
 import { formatPokemonName, pokedexNumber } from '@/utils/format'
@@ -12,16 +13,26 @@ const props = withDefaults(
     label?: string
     /** Pokémon yang tidak boleh dipilih lagi (sudah dipilih di slot lain). */
     excluded?: NamedPokemon[]
+    /** Saat true, memilih hasil langsung menavigasi ke halaman Pokémon. */
+    navigateOnSelect?: boolean
+    /**
+     * Buka daftar saat fokus meski belum mengetik. Jika false, daftar hanya
+     * muncul setelah ada teks ketikan (lebih hemat request API).
+     */
+    openOnEmptyQuery?: boolean
   }>(),
   {
     placeholder: 'Pilih Pokémon…',
     label: 'Cari Pokémon',
     excluded: () => [],
+    navigateOnSelect: false,
+    openOnEmptyQuery: true,
   },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [value: NamedPokemon | null] }>()
 
+const router = useRouter()
 const store = usePokedexStore()
 const query = ref('')
 const open = ref(false)
@@ -40,15 +51,31 @@ const results = computed<NamedPokemon[]>(() => {
   return filtered.slice(0, 60)
 })
 
+const hasQuery = computed(() => query.value.trim().length > 0)
+
 function onFocus() {
-  if (store.allPokemon.length === 0) void store.init()
   open.value = true
+  if (props.openOnEmptyQuery && store.allPokemon.length === 0) void store.init()
+}
+
+function onInput(event: Event) {
+  query.value = (event.target as HTMLInputElement).value
+  if (store.allPokemon.length === 0) void store.init()
 }
 
 function onSelect(pokemon: NamedPokemon) {
   query.value = ''
   open.value = false
+  if (props.navigateOnSelect) {
+    void router.push({ name: 'pokemon', params: { id: pokemon.name } })
+    return
+  }
   emit('update:modelValue', pokemon)
+}
+
+function onEnter() {
+  if (!props.navigateOnSelect || !open.value || results.value.length === 0) return
+  onSelect(results.value[0])
 }
 
 function clear() {
@@ -153,14 +180,15 @@ onBeforeUnmount(() => {
         :placeholder="placeholder"
         :aria-label="label"
         class="w-full rounded-2xl border border-slate-300 bg-white py-2.5 pl-11 pr-4 text-sm shadow-sm outline-none transition placeholder:text-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
-        @input="query = ($event.target as HTMLInputElement).value"
+        @input="onInput"
         @focus="onFocus"
+        @keydown.enter="onEnter"
         @keydown.esc="open = false"
       />
 
       <Transition name="picker">
         <ul
-          v-if="open"
+          v-if="open && (openOnEmptyQuery || hasQuery)"
           class="absolute inset-x-0 top-full z-30 mt-2 max-h-80 overflow-y-auto rounded-2xl border border-slate-200 bg-white py-1.5 shadow-xl"
           role="listbox"
         >

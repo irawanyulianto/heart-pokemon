@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { pokeApi } from '@/services/pokeapi'
-import SearchBar from '@/components/SearchBar.vue'
 import LoadingState from '@/components/LoadingState.vue'
 import PokemonCard from '@/components/PokemonCard.vue'
+import PokemonPicker from '@/components/PokemonPicker.vue'
 import PokemonPopup from '@/components/PokemonPopup.vue'
 import type { PokemonSummary } from '@/types'
 
-const router = useRouter()
-
-const query = ref('')
 const popular = ref<PokemonSummary[]>([])
 const popularStatus = ref<'loading' | 'error' | 'success'>('loading')
 const selectedPokemon = ref<PokemonSummary | null>(null)
@@ -25,29 +21,25 @@ onMounted(async () => {
     popularStatus.value = 'error'
   }
 })
-
-function search() {
-  const q = query.value.trim()
-  if (!q) return
-  void router.push({ path: '/pokedex', query: { q } })
-}
 </script>
 
 <template>
   <div class="space-y-16 pb-4">
     <section
-      class="relative -mx-4 overflow-hidden rounded-3xl bg-gradient-to-br from-primary-50 via-sky-50 to-white sm:-mx-6 xl:-mx-[calc((100vw-69rem)/2)]"
+      class="relative -mx-4 rounded-3xl bg-gradient-to-br from-primary-50 via-sky-50 to-white sm:-mx-6 xl:-mx-[calc((100vw-69rem)/2)]"
     >
-      <svg
-        class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 text-primary-100/70"
-        viewBox="0 0 100 100"
-        fill="none"
-        aria-hidden="true"
-      >
-        <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="6" opacity="0.7" />
-        <line x1="8" y1="50" x2="92" y2="50" stroke="currentColor" stroke-width="6" />
-        <circle cx="50" cy="50" r="13" fill="#fff" stroke="currentColor" stroke-width="6" />
-      </svg>
+      <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
+        <svg
+          class="absolute -right-16 -top-16 h-64 w-64 text-primary-100/70"
+          viewBox="0 0 100 100"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="6" opacity="0.7" />
+          <line x1="8" y1="50" x2="92" y2="50" stroke="currentColor" stroke-width="6" />
+          <circle cx="50" cy="50" r="13" fill="#fff" stroke="currentColor" stroke-width="6" />
+        </svg>
+      </div>
 
       <div
         class="relative z-10 mx-auto w-full max-w-6xl px-6 py-12 sm:px-12 sm:py-16"
@@ -62,23 +54,23 @@ function search() {
           secara real-time.
         </p>
 
-        <div class="mt-8 flex max-w-md flex-col gap-3">
-          <SearchBar v-model="query" label="Cari Pokémon di homepage" />
-          <div class="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              class="inline-flex items-center gap-2 rounded-full bg-primary-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600"
-              @click="search"
-            >
-              Cari
-            </button>
+        <div class="mt-8 max-w-md">
+          <PokemonPicker
+            :model-value="null"
+            label="Cari Pokémon di homepage"
+            placeholder="Cari: pikachu, charizard, blastoise…"
+            navigate-on-select
+            :open-on-empty-query="false"
+          />
+          <p class="mt-3 text-sm text-primary-700">
+            atau
             <RouterLink
               to="/pokedex"
-              class="text-sm font-semibold text-primary-700 underline-offset-4 hover:underline"
+              class="font-semibold text-primary-700 underline-offset-4 hover:underline"
             >
-              atau buka Pokédex lengkap →
+              buka Pokédex lengkap →
             </RouterLink>
-          </div>
+          </p>
         </div>
       </div>
       </div>
