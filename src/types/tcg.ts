@@ -21,3 +21,20 @@ export interface TcgCard {
   illustrator?: string
   set?: TcgSet
 }
+
+/** Objek kartu lengkap dari endpoint detail TCGdex (`/cards/{id}`). */
+export interface TcgCardDetailed {
+  id: string
+  localId: string
+  name: string
+  image: string | null
+  category: TcgCategory
+  hp?: number
+  types?: string[]
+  rarity?: string
+  stage?: string
+  illustrator?: string
+  set?: TcgSet
+  dexId?: number[]
+  description?: string
+}

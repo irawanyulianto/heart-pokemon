@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { formatPokemonName } from '@/utils/format'
+import { tcgThumbUrl, tcgFullUrl } from '@/utils/tcg'
 import type { TcgCard } from '@/types'
 
 const props = defineProps<{ cards: TcgCard[] }>()
@@ -16,7 +17,7 @@ function close(): void {
 }
 
 function currentFullUrl(): string {
-  return selected.value ? fullUrl(selected.value) : ''
+  return selected.value ? tcgFullUrl(selected.value) ?? '' : ''
 }
 
 function currentName(): string {
@@ -36,19 +37,6 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
   document.body.style.overflow = ''
 })
-
-/**
- * URL gambar di TCGdex memerlukan kualitas + ekstensi,
- * mis. `https://assets.tcgdex.net/en/base/basep/1/low.webp`.
- * `card.image` adalah basis tanpa ekstensi.
- */
-function thumbUrl(card: TcgCard): string {
-  return card.image ? `${card.image}/low.webp` : ''
-}
-
-function fullUrl(card: TcgCard): string {
-  return card.image ? `${card.image}/high.png` : ''
-}
 
 function setId(card: TcgCard): string {
   return card.set?.id ?? card.id.split('-')[0]
@@ -70,7 +58,7 @@ function setName(card: TcgCard): string {
         :aria-label="`Perbesar kartu ${card.name}`"
       >
         <img
-          :src="thumbUrl(card)"
+          :src="tcgThumbUrl(card)"
           :alt="`Kartu ${card.name}`"
           loading="lazy"
           decoding="async"

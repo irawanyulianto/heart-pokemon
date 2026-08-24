@@ -29,6 +29,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: 'Compare' },
       },
       {
+        path: 'deck-builder',
+        name: 'deck-builder',
+        component: () => import('../views/DeckBuilderView.vue'),
+        meta: { title: 'Deck Builder' },
+      },
+      {
         path: 'type-calculator',
         name: 'type-calculator',
         component: () => import('../views/TypeCalculatorView.vue'),
